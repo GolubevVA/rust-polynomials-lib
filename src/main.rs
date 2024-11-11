@@ -1,6 +1,7 @@
 #![forbid(unsafe_code)]
 
 pub mod polynomials;
+pub mod coefficients;
 
 fn main() {
     let x = polynomials::polynomial::Polynomial::<i32>::x();
@@ -14,6 +15,19 @@ fn main() {
 
     let p5 = p1.eval(2);
     println!("{:?}", p5);
+
+    let val = coefficients::matrices::SquareMatrix::<i32, 2>::new([[1, 2], [-3, 7]]);
+    println!("{:?}", val);
+    let res4 = p4.eval(val.clone());
+    println!("{:?}", res4);
+
+    let mut p_matrix_coeffs = polynomials::polynomial::Polynomial::<coefficients::matrices::SquareMatrix<i32, 2>>::x();
+    println!("{:?}", p_matrix_coeffs);
+    p_matrix_coeffs = p_matrix_coeffs + polynomials::polynomial::Polynomial::from_constant(val.clone());
+    println!("{:?}", p_matrix_coeffs);
+    println!("{:?}", p_matrix_coeffs.eval(val.clone()));
+    p_matrix_coeffs = p_matrix_coeffs.clone() * val.clone();
+    println!("{:?}", p_matrix_coeffs);
 }
 
 // p1 = x^2 + x + 1
