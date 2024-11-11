@@ -1,8 +1,10 @@
 #![forbid(unsafe_code)]
 //! # Natural Numbers
 
+use num::{Zero, One};
+
 /// A natural number.
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone, Copy)]
 pub struct NaturalNumber {
     val: u64,
 }
@@ -39,7 +41,7 @@ impl std::ops::Mul for NaturalNumber {
     }
 }
 
-impl num::Zero for NaturalNumber {
+impl Zero for NaturalNumber {
     fn zero() -> Self {
         Self { val: 0 }
     }
@@ -49,8 +51,47 @@ impl num::Zero for NaturalNumber {
     }
 }
 
-impl num::One for NaturalNumber {
+impl One for NaturalNumber {
     fn one() -> Self {
         Self { val: 1 }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_add_natural_numbers() {
+        let a = NaturalNumber::new(5);
+        let b = NaturalNumber::new(3);
+        let c = a + b;
+        assert_eq!(c, NaturalNumber::new(8));
+    }
+
+    #[test]
+    fn test_mul_natural_numbers() {
+        let a = NaturalNumber::new(5);
+        let b = NaturalNumber::new(3);
+        let c = a * b;
+        assert_eq!(c, NaturalNumber::new(15));
+    }
+
+    #[test]
+    fn test_zero_natural_numbers() {
+        let a = NaturalNumber::zero();
+        assert_eq!(a, NaturalNumber::new(0));
+    }
+
+    #[test]
+    fn test_is_zero_natural_numbers() {
+        let a = NaturalNumber::zero();
+        assert!(a.is_zero());
+    }
+
+    #[test]
+    fn test_one_natural_numbers() {
+        let a = NaturalNumber::one();
+        assert_eq!(a, NaturalNumber::new(1));
     }
 }

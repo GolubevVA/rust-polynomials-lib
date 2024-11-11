@@ -83,8 +83,7 @@ where
 
 impl<T> Polynomial<T>
 where
-    T: One + Zero + Clone + Mul<Output = T> + std::ops::Add<Output = T>,
-    Polynomial<T>: Mul<Output = Polynomial<T>>,
+    T: One + Zero + Clone,
 {
     /// Evaluate the polynomial at a given value.
     /// The value is substituted for `x` in the polynomial so that the coefficients are multiplied from the right.
@@ -210,7 +209,7 @@ where
 
 impl<T> Mul<T> for Polynomial<T>
 where
-    T: One + Zero + Clone + Mul<Output = T> + std::ops::Add<Output = T> + std::ops::Sub<Output = T>,
+    T: One + Zero + Clone + Mul<Output = T> + std::ops::Add<Output = T>,
 {
     type Output = Self;
 

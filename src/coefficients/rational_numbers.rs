@@ -1,8 +1,10 @@
 #![forbid(unsafe_code)]
 //! # Rational Numbers
 
+use num::{Zero, One};
+
 /// A rational number.
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone, Copy)]
 pub struct RationalNumber {
     numerator: i64,
     denominator: i64,
@@ -95,7 +97,7 @@ impl std::ops::Mul for RationalNumber {
     }
 }
 
-impl num::Zero for RationalNumber {
+impl Zero for RationalNumber {
     fn zero() -> Self {
         Self {
             numerator: 0,
@@ -108,11 +110,58 @@ impl num::Zero for RationalNumber {
     }
 }
 
-impl num::One for RationalNumber {
+impl One for RationalNumber {
     fn one() -> Self {
         Self {
             numerator: 1,
             denominator: 1,
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_add_rational_numbers() {
+        let a = RationalNumber::new(1, 2);
+        let b = RationalNumber::new(1, 3);
+        let c = a + b;
+        assert_eq!(c, RationalNumber::new(5, 6));
+    }
+
+    #[test]
+    fn test_sub_rational_numbers() {
+        let a = RationalNumber::new(1, 2);
+        let b = RationalNumber::new(1, 3);
+        let c = a - b;
+        assert_eq!(c, RationalNumber::new(1, 6));
+    }
+
+    #[test]
+    fn test_mul_rational_numbers() {
+        let a = RationalNumber::new(3, 2);
+        let b = RationalNumber::new(1, 3);
+        let c = a * b;
+        assert_eq!(c, RationalNumber::new(1, 2));
+    }
+
+    #[test]
+    fn test_zero_rational_numbers() {
+        let a = RationalNumber::zero();
+        assert_eq!(a, RationalNumber::new(0, 1));
+    }
+
+    #[test]
+    fn test_one_rational_numbers() {
+        let a = RationalNumber::one();
+        assert_eq!(a, RationalNumber::new(1, 1));
+    }
+
+    #[test]
+    fn test_normalize() {
+        let a = RationalNumber::new(2, 4);
+        assert_eq!(a, RationalNumber::new(1, 2));
     }
 }

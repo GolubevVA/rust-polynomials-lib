@@ -153,3 +153,78 @@ where
         Self { data }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_add_matrices() {
+        let a = SquareMatrix::new([[1, 2], [3, 4]]);
+        let b = SquareMatrix::new([[5, 6], [7, 8]]);
+        let c = a + b;
+        assert_eq!(c, SquareMatrix::new([[6, 8], [10, 12]]));
+    }
+
+    #[test]
+    fn test_sub_matrices() {
+        let a = SquareMatrix::new([[1, 2], [3, 4]]);
+        let b = SquareMatrix::new([[5, 6], [7, 8]]);
+        let c = a - b;
+        assert_eq!(c, SquareMatrix::new([[-4, -4], [-4, -4]]));
+    }
+
+    #[test]
+    fn test_neg_matrices() {
+        let a = SquareMatrix::new([[1, 2], [3, 4]]);
+        let b = -a;
+        assert_eq!(b, SquareMatrix::new([[-1, -2], [-3, -4]]));
+    }
+
+    #[test]
+    fn test_mul_matrices() {
+        let a = SquareMatrix::new([[1, 2], [3, 4]]);
+        let b = SquareMatrix::new([[5, 6], [7, 8]]);
+        let c = a * b;
+        assert_eq!(c, SquareMatrix::new([[19, 22], [43, 50]]));
+    }
+
+    #[test]
+    fn test_zero_matrices() {
+        let a = SquareMatrix::<i32, 2>::zero();
+        assert_eq!(a, SquareMatrix::new([[0, 0], [0, 0]]));
+    }
+
+    #[test]
+    fn test_one_matrices() {
+        let a = SquareMatrix::<i32, 2>::one();
+        assert_eq!(a, SquareMatrix::new([[1, 0], [0, 1]]));
+    }
+
+    #[test]
+    fn test_mul_scalar_matrices() {
+        let a = SquareMatrix::new([[1, 2], [3, 4]]);
+        let b = a * 2;
+        assert_eq!(b, SquareMatrix::new([[2, 4], [6, 8]]));
+    }
+
+    #[test]
+    fn test_is_zero_matrices() {
+        let a = SquareMatrix::new([[0, 0], [0, 0]]);
+        assert!(a.is_zero());
+    }
+
+    #[test]
+    fn test_data_matrices() {
+        let a = SquareMatrix::new([[1, 2], [3, 4]]);
+        assert_eq!(a.data(), &[[1, 2], [3, 4]]);
+    }
+
+    #[test]
+    fn test_add_matrices_3x3() {
+        let a = SquareMatrix::new([[1, 2, 3], [4, 5, 6], [7, 8, 9]]);
+        let b = SquareMatrix::new([[9, 8, 7], [6, 5, 4], [3, 2, 1]]);
+        let c = a + b;
+        assert_eq!(c, SquareMatrix::new([[10, 10, 10], [10, 10, 10], [10, 10, 10]]));
+    }
+}
