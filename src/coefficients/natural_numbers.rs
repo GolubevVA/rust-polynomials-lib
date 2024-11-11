@@ -1,15 +1,19 @@
 #![forbid(unsafe_code)]
+//! # Natural Numbers
 
+/// A natural number.
 #[derive(Debug, PartialEq, Clone)]
 pub struct NaturalNumber {
     val: u64,
 }
 
 impl NaturalNumber {
+    /// Create a new `NaturalNumber` from a `u64`.
     pub fn new(val: u64) -> Self {
         Self { val }
     }
 
+    /// Get the value of the `NaturalNumber`.
     pub fn val(&self) -> u64 {
         self.val
     }

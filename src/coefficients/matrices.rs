@@ -1,6 +1,10 @@
+#![forbid(unsafe_code)]
+//! # Matrices
+
 use std::ops::{Add, Sub, Mul, Neg};
 use num::{Zero, One};
 
+/// A square matrix.
 #[derive(Clone, Debug, PartialEq)]
 pub struct SquareMatrix<T, const N: usize> {
     data: [[T; N]; N],

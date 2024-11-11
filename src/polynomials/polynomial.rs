@@ -1,9 +1,11 @@
 #![forbid(unsafe_code)]
+//! # Polynomials
 
 use std::ops::Mul;
 
 use num::{One, Zero};
 
+/// A polynomial.
 #[derive(Clone, Debug, PartialEq)]
 pub struct Polynomial<T>
 where
@@ -16,30 +18,58 @@ impl<T> Polynomial<T>
 where
     T: Clone + Zero + One,
 {
+    /// Create a new `Polynomial` from a constant.
+    /// The constant becomes the constant term of the polynomial.
     pub fn from_constant(c: T) -> Self {
         Self {
             coefficients: vec![c],
         }
     }
 
+    /// Create a new `Polynomial` from a vector of coefficients.
+    /// The Polynomial is normalized after creation.
+    /// # Examples
+    /// ```
+    /// use polynomials::polynomial::Polynomial;
+    /// let p = Polynomial::from_vector(vec![1, 2, 3, 0]); // 1 + 2x + 3x^2
+    /// ```
     pub fn from_vector(coefficients: Vec<T>) -> Self {
         let mut result = Self { coefficients };
         result.normalize();
         result
     }
 
+    /// Create a new `Polynomial` representing the `x` variable.
+    /// # Examples
+    /// ```
+    /// use polynomials::polynomial::Polynomial;
+    /// let p = Polynomial::<i32>::x(); // x
+    /// ```
     pub fn x() -> Self {
         Self {
             coefficients: vec![T::zero(), T::one()],
         }
     }
 
+    /// Create a new `Polynomial` representing the `x^n` variable.
+    /// # Examples
+    /// ```
+    /// use polynomials::polynomial::Polynomial;
+    /// let p = Polynomial::<i32>::x_pow(3); // x^3
+    /// ```
     pub fn x_pow(n: usize) -> Self {
         let mut coefficients = vec![T::zero(); n + 1];
         coefficients[n] = T::one();
         Self { coefficients }
     }
 
+    /// Normalizes the polynomial by removing trailing zero coefficients.
+    /// # Examples
+    /// ```
+    /// use polynomials::polynomial::Polynomial;
+    /// let mut p = Polynomial::from_vector(vec![1, 2, 3, 0]); // 1 + 2x + 3x^2
+    /// p.normalize(); // ensuring p to be 1 + 2x + 3x^2
+    /// ```
     pub fn normalize(&mut self) {
         while let Some(c) = self.coefficients.last() {
             if self.coefficients.len() == 1 || !c.is_zero() {
@@ -55,6 +85,16 @@ where
     T: One + Zero + Clone + Mul<Output = T> + std::ops::Add<Output = T>,
     Polynomial<T>: Mul<Output = Polynomial<T>>,
 {
+    /// Evaluate the polynomial at a given value.
+    /// The value is substituted for `x` in the polynomial so that the coefficients are multiplied from the right.
+    /// Note, that this function assumes that multiplying the `One`` element of the `x`'s type with a coefficient is what the constant term of the polynomial is.
+    /// # Examples
+    /// ```
+    /// use polynomials::polynomial::Polynomial;
+    /// let p = Polynomial::from_vector(vec![1, 2, 3]); // 1 + 2x + 3x^2
+    /// let res = p.eval(2); // 1 + 2*2 + 3*2^2 = 1 + 4 + 12 = 17
+    /// assert_eq!(res, 17);
+    /// ```
     pub fn eval<U>(&self, x: U) -> U
     where
         U: Clone + Zero + std::ops::Add<Output = U> + Mul<Output = U> + One + Mul<T, Output = U>,
@@ -202,6 +242,7 @@ where
     }
 }
 
+/// Exponentiation of a polynomial.
 impl<T> std::ops::BitXor<usize> for Polynomial<T>
 where
     T: One + Zero + Clone + std::ops::Add<Output = T> + Mul<Output = T>,

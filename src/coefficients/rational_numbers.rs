@@ -1,5 +1,7 @@
 #![forbid(unsafe_code)]
+//! # Rational Numbers
 
+/// A rational number.
 #[derive(Debug, PartialEq, Clone)]
 pub struct RationalNumber {
     numerator: i64,
@@ -7,14 +9,32 @@ pub struct RationalNumber {
 }
 
 impl RationalNumber {
+    /// Create a new `RationalNumber` from a numerator and a denominator.
+    /// The result is normalized.
+    /// # Examples
+    /// ```
+    /// use math::coefficients::rational_numbers::RationalNumber;
+    /// let r = RationalNumber::new(2, 4);
+    /// assert_eq!(r.numerator(), 1);
+    /// assert_eq!(r.denominator(), 2);
+    /// ```
+    /// 
+    /// The denominator is always positive.
     pub fn new(numerator: i64, denominator: i64) -> Self {
-        Self { numerator, denominator }
+        let mut result = Self {
+            numerator,
+            denominator,
+        };
+        result.normalize();
+        result
     }
 
+    /// Get the numerator of the `RationalNumber`.
     pub fn numerator(&self) -> i64 {
         self.numerator
     }
 
+    /// Get the denominator of the `RationalNumber`.
     pub fn denominator(&self) -> i64 {
         self.denominator
     }
