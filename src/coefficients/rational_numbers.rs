@@ -13,7 +13,7 @@ impl RationalNumber {
     /// The result is normalized.
     /// # Examples
     /// ```
-    /// use math::coefficients::rational_numbers::RationalNumber;
+    /// use rust_polynomials_lib::coefficients::RationalNumber;
     /// let r = RationalNumber::new(2, 4);
     /// assert_eq!(r.numerator(), 1);
     /// assert_eq!(r.denominator(), 2);

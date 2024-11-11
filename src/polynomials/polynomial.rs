@@ -30,8 +30,9 @@ where
     /// The Polynomial is normalized after creation.
     /// # Examples
     /// ```
-    /// use polynomials::polynomial::Polynomial;
+    /// use rust_polynomials_lib::polynomials::Polynomial;
     /// let p = Polynomial::from_vector(vec![1, 2, 3, 0]); // 1 + 2x + 3x^2
+    /// assert_eq!(p, Polynomial::from_vector(vec![1, 2, 3]));
     /// ```
     pub fn from_vector(coefficients: Vec<T>) -> Self {
         let mut result = Self { coefficients };
@@ -42,7 +43,7 @@ where
     /// Create a new `Polynomial` representing the `x` variable.
     /// # Examples
     /// ```
-    /// use polynomials::polynomial::Polynomial;
+    /// use rust_polynomials_lib::polynomials::Polynomial;
     /// let p = Polynomial::<i32>::x(); // x
     /// ```
     pub fn x() -> Self {
@@ -54,7 +55,7 @@ where
     /// Create a new `Polynomial` representing the `x^n` variable.
     /// # Examples
     /// ```
-    /// use polynomials::polynomial::Polynomial;
+    /// use rust_polynomials_lib::polynomials::Polynomial;
     /// let p = Polynomial::<i32>::x_pow(3); // x^3
     /// ```
     pub fn x_pow(n: usize) -> Self {
@@ -66,7 +67,7 @@ where
     /// Normalizes the polynomial by removing trailing zero coefficients.
     /// # Examples
     /// ```
-    /// use polynomials::polynomial::Polynomial;
+    /// use rust_polynomials_lib::polynomials::Polynomial;
     /// let mut p = Polynomial::from_vector(vec![1, 2, 3, 0]); // 1 + 2x + 3x^2
     /// p.normalize(); // ensuring p to be 1 + 2x + 3x^2
     /// ```
@@ -90,7 +91,7 @@ where
     /// Note, that this function assumes that multiplying the `One`` element of the `x`'s type with a coefficient is what the constant term of the polynomial is.
     /// # Examples
     /// ```
-    /// use polynomials::polynomial::Polynomial;
+    /// use rust_polynomials_lib::polynomials::Polynomial;
     /// let p = Polynomial::from_vector(vec![1, 2, 3]); // 1 + 2x + 3x^2
     /// let res = p.eval(2); // 1 + 2*2 + 3*2^2 = 1 + 4 + 12 = 17
     /// assert_eq!(res, 17);
