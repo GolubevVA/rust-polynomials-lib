@@ -1,7 +1,7 @@
 #![forbid(unsafe_code)]
 //! # Rational Numbers
 
-use num::{Zero, One};
+use num::{One, Zero};
 
 /// A rational number.
 #[derive(Debug, PartialEq, Clone, Copy)]

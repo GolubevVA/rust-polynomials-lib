@@ -1,7 +1,7 @@
 #![forbid(unsafe_code)]
 //! # Natural Numbers
 
-use num::{Zero, One};
+use num::{One, Zero};
 
 /// A natural number.
 #[derive(Debug, PartialEq, Clone, Copy)]

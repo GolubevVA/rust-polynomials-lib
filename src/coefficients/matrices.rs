@@ -225,6 +225,9 @@ mod tests {
         let a = SquareMatrix::new([[1, 2, 3], [4, 5, 6], [7, 8, 9]]);
         let b = SquareMatrix::new([[9, 8, 7], [6, 5, 4], [3, 2, 1]]);
         let c = a + b;
-        assert_eq!(c, SquareMatrix::new([[10, 10, 10], [10, 10, 10], [10, 10, 10]]));
+        assert_eq!(
+            c,
+            SquareMatrix::new([[10, 10, 10], [10, 10, 10], [10, 10, 10]])
+        );
     }
 }
