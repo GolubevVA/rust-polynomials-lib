@@ -267,3 +267,36 @@ where
         result
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_i64_coeffs() {
+        let p = Polynomial::from_vector(vec![1, 2, 3, 0]); // 1 + 2x + 3x^2
+        assert_eq!(p, Polynomial::from_vector(vec![1, 2, 3]));
+
+        let x = Polynomial::<i64>::x();
+        assert_eq!(x, Polynomial::from_vector(vec![0, 1]));
+
+        let x_pow_3 = Polynomial::<i64>::x_pow(3);
+        assert_eq!(x_pow_3, Polynomial::from_vector(vec![0, 0, 0, 1]));
+
+        let const_polynom = Polynomial::<i64>::from_constant(5);
+        assert_eq!(const_polynom, Polynomial::from_vector(vec![5]));
+
+        let p = x_pow_3.clone() + x.clone() * 2 + const_polynom.clone();
+        assert_eq!(p, Polynomial::from_vector(vec![5, 2, 0, 1]));
+
+        let res = p.eval(2);
+        assert_eq!(res, 17);
+    }
+
+    #[test]
+    fn test_pow() {
+        let p = Polynomial::from_vector(vec![1, 2, 3]);
+        let p2 = p.clone() ^ 2;
+        assert_eq!(p2, Polynomial::from_vector(vec![1, 4, 10, 12, 9]));
+    }
+}
