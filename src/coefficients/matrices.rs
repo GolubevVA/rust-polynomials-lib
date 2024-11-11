@@ -34,9 +34,9 @@ where
     fn add(self, rhs: Self) -> Self::Output {
         let mut data = [[T::zero(); N]; N];
 
-        for i in 0..N {
-            for j in 0..N {
-                data[i][j] = self.data[i][j] + rhs.data[i][j];
+        for row in 0..N {
+            for col in 0..N {
+                data[row][col] = self.data[row][col] + rhs.data[row][col];
             }
         }
 
@@ -53,9 +53,9 @@ where
     fn sub(self, rhs: Self) -> Self::Output {
         let mut data = [[T::zero(); N]; N];
 
-        for i in 0..N {
-            for j in 0..N {
-                data[i][j] = self.data[i][j] - rhs.data[i][j];
+        for row in 0..N {
+            for col in 0..N {
+                data[row][col] = self.data[row][col] - rhs.data[row][col];
             }
         }
 
@@ -72,9 +72,9 @@ where
     fn neg(self) -> Self::Output {
         let mut data = [[T::zero(); N]; N];
 
-        for i in 0..N {
-            for j in 0..N {
-                data[i][j] = -self.data[i][j];
+        for row in 0..N {
+            for col in 0..N {
+                data[row][col] = -self.data[row][col];
             }
         }
 
@@ -91,13 +91,13 @@ where
     fn mul(self, rhs: Self) -> Self::Output {
         let mut data = [[T::zero(); N]; N];
 
-        for i in 0..N {
-            for j in 0..N {
+        for row in 0..N {
+            for col in 0..N {
                 let mut sum = T::zero();
-                for k in 0..N {
-                    sum = sum + self.data[i][k] * rhs.data[k][j];
+                for it in 0..N {
+                    sum = sum + self.data[row][it] * rhs.data[it][col];
                 }
-                data[i][j] = sum;
+                data[row][col] = sum;
             }
         }
 
@@ -128,8 +128,8 @@ where
 {
     fn one() -> Self {
         let mut data = [[T::zero(); N]; N];
-        for i in 0..N {
-            data[i][i] = T::one();
+        for diag_it in 0..N {
+            data[diag_it][diag_it] = T::one();
         }
         Self { data }
     }
@@ -144,9 +144,9 @@ where
     fn mul(self, rhs: T) -> Self::Output {
         let mut data = [[T::zero(); N]; N];
 
-        for i in 0..N {
-            for j in 0..N {
-                data[i][j] = self.data[i][j] * rhs;
+        for row in 0..N {
+            for col in 0..N {
+                data[row][col] = self.data[row][col] * rhs;
             }
         }
 

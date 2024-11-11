@@ -183,9 +183,9 @@ where
 
     fn add(self, rhs: Self) -> Self {
         let mut coefficients = vec![T::zero(); self.coefficients.len().max(rhs.coefficients.len())];
-        for i in 0..coefficients.len() {
-            coefficients[i] = self.coefficients.get(i).cloned().unwrap_or(T::zero())
-                + rhs.coefficients.get(i).cloned().unwrap_or(T::zero());
+        for deg in 0..coefficients.len() {
+            coefficients[deg] = self.coefficients.get(deg).cloned().unwrap_or(T::zero())
+                + rhs.coefficients.get(deg).cloned().unwrap_or(T::zero());
         }
         Self::from_vector(coefficients)
     }
@@ -199,9 +199,9 @@ where
 
     fn sub(self, rhs: Self) -> Self {
         let mut coefficients = vec![T::zero(); self.coefficients.len().max(rhs.coefficients.len())];
-        for i in 0..coefficients.len() {
-            coefficients[i] = self.coefficients.get(i).cloned().unwrap_or(T::zero())
-                - rhs.coefficients.get(i).cloned().unwrap_or(T::zero());
+        for deg in 0..coefficients.len() {
+            coefficients[deg] = self.coefficients.get(deg).cloned().unwrap_or(T::zero())
+                - rhs.coefficients.get(deg).cloned().unwrap_or(T::zero());
         }
         Self::from_vector(coefficients)
     }
@@ -232,10 +232,10 @@ where
     fn mul(self, rhs: Self) -> Self {
         let mut coefficients =
             vec![T::zero(); self.coefficients.len() + rhs.coefficients.len() - 1];
-        for i in 0..self.coefficients.len() {
-            for j in 0..rhs.coefficients.len() {
-                coefficients[i + j] = coefficients[i + j].clone()
-                    + self.coefficients[i].clone() * rhs.coefficients[j].clone();
+        for deg1 in 0..self.coefficients.len() {
+            for deg2 in 0..rhs.coefficients.len() {
+                coefficients[deg1 + deg2] = coefficients[deg1 + deg2].clone()
+                    + self.coefficients[deg1].clone() * rhs.coefficients[deg2].clone();
             }
         }
         Self::from_vector(coefficients)

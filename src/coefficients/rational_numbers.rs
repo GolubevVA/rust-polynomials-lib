@@ -42,7 +42,7 @@ impl RationalNumber {
     }
 
     fn normalize(&mut self) {
-        let gcd = num::integer::gcd(self.numerator, self.denominator as i64);
+        let gcd = num::integer::gcd(self.numerator, self.denominator);
         self.numerator /= gcd;
         self.denominator /= gcd;
         if self.denominator < 0 {
