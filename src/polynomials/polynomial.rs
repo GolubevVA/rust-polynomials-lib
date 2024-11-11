@@ -55,11 +55,13 @@ where
     T: One + Zero + Clone + Mul<Output = T> + std::ops::Add<Output = T>,
     Polynomial<T>: Mul<Output = Polynomial<T>>,
 {
-    pub fn eval(&self, x: Polynomial<T>) -> Polynomial<T> {
-        let p = self.clone();
-        let mut result = Polynomial::zero();
-        for c in p.coefficients.iter().rev() {
-            result = result * x.clone() + Polynomial::from_constant(c.clone());
+    pub fn eval<U>(&self, x: U) -> U
+    where
+        U: Clone + Zero + std::ops::Add<Output = U> + Mul<Output = U> + One + Mul<T, Output = U>,
+    {
+        let mut result = U::zero();
+        for coeff in self.coefficients.iter().rev() {
+            result = result * x.clone() + U::one() * coeff.clone();
         }
         result
     }

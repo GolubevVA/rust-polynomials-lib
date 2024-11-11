@@ -11,6 +11,9 @@ fn main() {
     println!("{:?}", p3);
     let p4 = p1.eval(p2.clone());
     println!("{:?}", p4);
+
+    let p5 = p1.eval(2);
+    println!("{:?}", p5);
 }
 
 // p1 = x^2 + x + 1
