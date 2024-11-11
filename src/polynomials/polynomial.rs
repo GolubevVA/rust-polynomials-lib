@@ -1,18 +1,19 @@
 #![forbid(unsafe_code)]
 
-use num::One;
+use num::{One, Zero};
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Polynomial<T>
 where
-    T: num::One + num::Zero + Clone,
+    T: One + Zero + Clone,
 {
     coefficients: Vec<T>,
 }
 
 impl<T> Polynomial<T>
 where
-    T: num::One + num::Zero + Clone,
+    T: One + Zero + Clone,
+    Polynomial<T>: std::ops::Mul<Output = Polynomial<T>> + Zero,
 {
     pub fn from_constant(c: T) -> Self {
         Self {
@@ -31,11 +32,21 @@ where
         coefficients[n] = T::one();
         Self { coefficients }
     }
+
+    pub fn eval(&self, x: Self) -> Self
+    {
+        let p = self.clone();
+        let mut result = Polynomial::zero();
+        for c in p.coefficients.iter().rev() {
+            result = result * x.clone() + Polynomial::from_constant(c.clone());
+        }
+        result
+    }
 }
 
-impl<T> num::Zero for Polynomial<T>
+impl<T> Zero for Polynomial<T>
 where
-    T: num::Zero + Clone + num::One,
+    T: Zero + Clone + One,
 {
     fn zero() -> Self {
         Polynomial {
@@ -48,9 +59,9 @@ where
     }
 }
 
-impl<T> num::One for Polynomial<T>
+impl<T> One for Polynomial<T>
 where
-    T: num::Zero + Clone + num::One,
+    T: Zero + Clone + One,
     Polynomial<T>: std::ops::Mul<Output = Polynomial<T>>,
 {
     fn one() -> Self {
@@ -62,7 +73,7 @@ where
 
 impl<T> std::ops::Neg for Polynomial<T>
 where
-    T: std::ops::Neg<Output = T> + num::One + num::Zero + Clone,
+    T: std::ops::Neg<Output = T> + One + Zero + Clone,
 {
     type Output = Self;
 
@@ -75,7 +86,7 @@ where
 
 impl<T> std::ops::Add<T> for Polynomial<T>
 where
-    T: num::One + num::Zero + Clone + std::ops::Add<Output = T>,
+    T: One + Zero + Clone + std::ops::Add<Output = T>,
 {
     type Output = Self;
 
@@ -89,7 +100,7 @@ where
 
 impl<T> std::ops::Sub<T> for Polynomial<T>
 where
-    T: num::One + num::Zero + Clone + std::ops::Sub<Output = T>,
+    T: One + Zero + Clone + std::ops::Sub<Output = T>,
 {
     type Output = Self;
 
@@ -103,7 +114,7 @@ where
 
 impl<T> std::ops::Add for Polynomial<T>
 where
-    T: num::One + num::Zero + Clone + std::ops::Add<Output = T>,
+    T: One + Zero + Clone + std::ops::Add<Output = T>,
 {
     type Output = Self;
 
@@ -119,7 +130,7 @@ where
 
 impl<T> std::ops::Sub for Polynomial<T>
 where
-    T: num::One + num::Zero + Clone + std::ops::Sub<Output = T>,
+    T: One + Zero + Clone + std::ops::Sub<Output = T>,
 {
     type Output = Self;
 
@@ -135,8 +146,8 @@ where
 
 impl<T> std::ops::Mul<T> for Polynomial<T>
 where
-    T: num::One
-        + num::Zero
+    T: One
+        + Zero
         + Clone
         + std::ops::Mul<Output = T>
         + std::ops::Add<Output = T>
@@ -157,8 +168,8 @@ where
 
 impl<T> std::ops::Mul for Polynomial<T>
 where
-    T: num::One
-        + num::Zero
+    T: One
+        + Zero
         + Clone
         + std::ops::Mul<Output = T>
         + std::ops::Add<Output = T>
@@ -180,8 +191,8 @@ where
 
 impl<T> std::ops::BitXor<usize> for Polynomial<T>
 where
-    T: num::One + num::Zero + Clone + std::ops::Add<Output = T> + std::ops::Mul<Output = T>,
-    Polynomial<T>: num::One,
+    T: One + Zero + Clone + std::ops::Add<Output = T> + std::ops::Mul<Output = T>,
+    Polynomial<T>: One,
 {
     type Output = Self;
 
