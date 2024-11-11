@@ -18,7 +18,7 @@ impl RationalNumber {
     /// assert_eq!(r.numerator(), 1);
     /// assert_eq!(r.denominator(), 2);
     /// ```
-    /// 
+    ///
     /// The denominator is always positive.
     pub fn new(numerator: i64, denominator: i64) -> Self {
         let mut result = Self {

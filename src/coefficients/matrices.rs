@@ -1,8 +1,8 @@
 #![forbid(unsafe_code)]
 //! # Matrices
 
-use std::ops::{Add, Sub, Mul, Neg};
-use num::{Zero, One};
+use num::{One, Zero};
+use std::ops::{Add, Mul, Neg, Sub};
 
 /// A square matrix.
 #[derive(Clone, Debug, PartialEq)]
