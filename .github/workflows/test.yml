@@ -11,14 +11,19 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        rust: [stable, beta]
+
     steps:
     - name: Check out code
       uses: actions/checkout@v3
 
     - name: Set up Rust
-      uses: rust-lang/setup-rust@v1
+      uses: actions-rs/toolchain@v1
       with:
-        rust-version: stable
+        toolchain: ${{ matrix.rust }}
+        override: true
 
     - name: Cache cargo registry
       uses: actions/cache@v3
@@ -41,3 +46,9 @@ jobs:
 
     - name: Run tests
       run: cargo test --verbose
+
+    - name: Run Clippy (Linter)
+      run: cargo clippy --all-targets --all-features -- -D warnings
+
+    - name: Check Formatting
+      run: cargo fmt -- --check
