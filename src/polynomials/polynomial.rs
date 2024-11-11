@@ -1,5 +1,7 @@
 #![forbid(unsafe_code)]
 
+use std::ops::Mul;
+
 use num::{One, Zero};
 
 #[derive(Clone, Debug, PartialEq)]
@@ -12,13 +14,18 @@ where
 
 impl<T> Polynomial<T>
 where
-    T: One + Zero + Clone,
-    Polynomial<T>: std::ops::Mul<Output = Polynomial<T>> + Zero,
+    T: Clone + Zero + One,
 {
     pub fn from_constant(c: T) -> Self {
         Self {
             coefficients: vec![c],
         }
+    }
+
+    pub fn from_vector(coefficients: Vec<T>) -> Self {
+        let mut result = Self { coefficients };
+        result.normalize();
+        result
     }
 
     pub fn x() -> Self {
@@ -33,8 +40,22 @@ where
         Self { coefficients }
     }
 
-    pub fn eval(&self, x: Self) -> Self
-    {
+    pub fn normalize(&mut self) {
+        while let Some(c) = self.coefficients.last() {
+            if self.coefficients.len() == 1 || !c.is_zero() {
+                break;
+            }
+            self.coefficients.pop();
+        }
+    }
+}
+
+impl<T> Polynomial<T>
+where
+    T: One + Zero + Clone + Mul<Output = T> + std::ops::Add<Output = T>,
+    Polynomial<T>: Mul<Output = Polynomial<T>>,
+{
+    pub fn eval(&self, x: Polynomial<T>) -> Polynomial<T> {
         let p = self.clone();
         let mut result = Polynomial::zero();
         for c in p.coefficients.iter().rev() {
@@ -62,7 +83,7 @@ where
 impl<T> One for Polynomial<T>
 where
     T: Zero + Clone + One,
-    Polynomial<T>: std::ops::Mul<Output = Polynomial<T>>,
+    Polynomial<T>: Mul<Output = Polynomial<T>>,
 {
     fn one() -> Self {
         Polynomial {
@@ -108,7 +129,7 @@ where
     fn sub(self, rhs: T) -> Self {
         let mut coefficients = self.coefficients;
         coefficients[0] = coefficients[0].clone() - rhs;
-        Self { coefficients }
+        Self::from_vector(coefficients)
     }
 }
 
@@ -124,7 +145,7 @@ where
             coefficients[i] = self.coefficients.get(i).cloned().unwrap_or(T::zero())
                 + rhs.coefficients.get(i).cloned().unwrap_or(T::zero());
         }
-        Self { coefficients }
+        Self::from_vector(coefficients)
     }
 }
 
@@ -140,58 +161,48 @@ where
             coefficients[i] = self.coefficients.get(i).cloned().unwrap_or(T::zero())
                 - rhs.coefficients.get(i).cloned().unwrap_or(T::zero());
         }
-        Self { coefficients }
+        Self::from_vector(coefficients)
     }
 }
 
-impl<T> std::ops::Mul<T> for Polynomial<T>
+impl<T> Mul<T> for Polynomial<T>
 where
-    T: One
-        + Zero
-        + Clone
-        + std::ops::Mul<Output = T>
-        + std::ops::Add<Output = T>
-        + std::ops::Sub<Output = T>,
+    T: One + Zero + Clone + Mul<Output = T> + std::ops::Add<Output = T> + std::ops::Sub<Output = T>,
 {
     type Output = Self;
 
     fn mul(self, rhs: T) -> Self {
-        Self {
-            coefficients: self
-                .coefficients
+        Self::from_vector(
+            self.coefficients
                 .into_iter()
                 .map(|c| c * rhs.clone())
                 .collect(),
-        }
+        )
     }
 }
 
-impl<T> std::ops::Mul for Polynomial<T>
+impl<T> Mul for Polynomial<T>
 where
-    T: One
-        + Zero
-        + Clone
-        + std::ops::Mul<Output = T>
-        + std::ops::Add<Output = T>
-        + std::ops::Sub<Output = T>,
+    T: One + Zero + Clone + Mul<Output = T> + std::ops::Add<Output = T> + std::ops::Sub<Output = T>,
 {
     type Output = Self;
 
     fn mul(self, rhs: Self) -> Self {
-        let mut coefficients = vec![T::zero(); self.coefficients.len() + rhs.coefficients.len() - 1];
+        let mut coefficients =
+            vec![T::zero(); self.coefficients.len() + rhs.coefficients.len() - 1];
         for i in 0..self.coefficients.len() {
             for j in 0..rhs.coefficients.len() {
                 coefficients[i + j] = coefficients[i + j].clone()
                     + self.coefficients[i].clone() * rhs.coefficients[j].clone();
             }
         }
-        Self { coefficients }
+        Self::from_vector(coefficients)
     }
 }
 
 impl<T> std::ops::BitXor<usize> for Polynomial<T>
 where
-    T: One + Zero + Clone + std::ops::Add<Output = T> + std::ops::Mul<Output = T>,
+    T: One + Zero + Clone + std::ops::Add<Output = T> + Mul<Output = T>,
     Polynomial<T>: One,
 {
     type Output = Self;
